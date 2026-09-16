@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Token Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+
+        :root {
+            --primary: #d946ef;
+            --primary-glow: rgba(217, 70, 239, 0.35);
+            --dark-bg: #030014;
+            --card-bg: rgba(15, 15, 20, 0.85);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 0 0 20px 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .top-nav {
+            width: 100%;
+            max-width: 460px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            background: rgba(3, 0, 20, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #d946ef;
+            box-shadow: 0 0 10px rgba(217, 70, 239, 0.5);
+            overflow: hidden;
+            background: #000;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .nav-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .contact-btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+
+        .contact-btn:hover {
+            background-color: #2563eb;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .cyber-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+            position: relative;
+            width: 100%;
+            max-width: 460px;
+            padding: 20px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .cyber-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 60%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .title-font {
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .cyber-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: monospace;
+            transition: all 0.3s ease;
+        }
+
+        .cyber-input:focus {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 20px var(--primary-glow);
+            outline: none;
+        }
+
+        .btn-grad {
+            background-image: linear-gradient(to right, #8b5cf6 0%, #d946ef 51%, #8b5cf6 100%);
+            background-size: 200% auto;
+            transition: 0.5s;
+            border: none;
+            box-shadow: 0 0 20px rgba(217, 70, 239, 0.4);
+        }
+
+        .btn-grad:hover {
+            background-position: right center;
+            box-shadow: 0 0 30px rgba(217, 70, 239, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .social-icon-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.2s;
+            border-radius: 12px;
+        }
+
+        .social-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .token-box {
+            background: #0f0f11;
+            border: 1px dashed #333;
+            color: #a855f7;
+            font-family: monospace;
+            word-break: break-all;
+            white-space: normal;
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .animate-in {
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .video-thumb-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .video-thumb-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .video-overlay-text {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: #facc15;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+  <!-- ================= WELCOME MODAL START ================= -->
+  <div id="welcomeModal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div class="bg-[#0f0f13] border border-white/10 w-full max-w-sm rounded-2xl p-6 relative shadow-2xl text-center flex flex-col items-center">
+          
+          <!-- Telegram Icon (এখন পারফেক্টলি সেন্টারে থাকবে) -->
+          <div class="w-16 h-16 bg-[#229ED9] rounded-full flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(34,158,217,0.5)]">
+              <i class="fab fa-telegram-plane text-white text-3xl"></i>
+          </div>
+          
+          <h3 class="text-xl font-bold text-white mb-2 title-font uppercase tracking-widest">WELCOME TO LIMONSPACE</h3>
+          
+          <p class="text-xs text-gray-400 mb-6 leading-relaxed text-center">
+              Join our official Telegram channel for the latest updates, free tokens, and fast support!
+          </p>
+          
+          <a href="https://t.me/NLXD_2" target="_blank" class="btn-grad w-full rounded-xl py-3.5 font-bold title-font text-white text-sm tracking-widest flex items-center justify-center gap-2 mb-3">
+              <i class="fas fa-paper-plane"></i> JOIN CHANNEL
+          </a>
+          
+          <button onclick="closeModal('welcomeModal')" class="w-full py-3.5 rounded-xl bg-black hover:bg-white/5 text-white text-sm font-bold border border-white/10 transition">
+              CONTINUE TO SITE
+          </button>
+      </div>
+  </div>
+  <!-- ================= WELCOME MODAL END ================= -->
+
+  <div id="toast"></div>
+
+  <!-- TOP BAR (Sticky & Fixed Header) -->
+  <div class="top-nav">
+    <div class="logo-container">
+      <div class="logo-badge">
+        <img src="https://i.ibb.co.com/95vbBrn/Screenshot-2026-08-13-11-40-05-24-7352322957d4404136654ef4adb64504.jpg" alt="FFToc Logo">
+      </div>
+      <div class="nav-title">ACCESS TOKEN</div>
+    </div>
+    <a href="https://t.me/NLXD_72" target="_blank" class="contact-btn">
+      <i class="fab fa-telegram-plane"></i> Contact
+    </a>
+  </div>
+
+    <div class="cyber-card">
+
+        <!-- Video Tutorial Section -->
+        <div class="mb-6">
+            <div class="flex items-center gap-2 mb-3">
+                <i class="fab fa-youtube text-red-500 text-sm"></i>
+                <span class="text-xs font-bold text-gray-300 uppercase tracking-wider">VIDEO TUTORIAL</span>
+            </div>
+            
+            <a href="https://youtu.be/txeASjAouaI?si=sO8NQkBmi8TfXhl0" target="_blank" class="video-thumb-container block group">
+                <img src="https://i.ibb.co.com/tT2QmLqH/file-00000000cff082119e184d92c4bd4f32.png" class="opacity-80 group-hover:opacity-100 transition duration-300" alt="Video Tutorial">
+                
+                <div class="video-overlay-text">GET ACCESS TOKEN</div>
+                
+                <div class="absolute bottom-8 left-8 text-green-500 text-4xl transform -rotate-12 drop-shadow-lg">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(220,38,38,0.8)] group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-play text-white text-xl ml-1"></i>
+                    </div>
+                </div>
+                
+                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent pt-10 pb-2 px-3">
+                    <p class="text-white text-sm font-bold text-center tracking-wide">Click and Watch Tutorial</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Login Providers Section -->
+        <div class="mb-5">
+            <div class="flex justify-between items-end mb-3">
+                <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">SELECT PROVIDER & LOGIN</span>
+                <i class="fas fa-cog text-gray-500 text-xs"></i>
+            </div>
+            <div class="grid grid-cols-5 gap-2">
+                <a href="https://auth.garena.com/universal/oauth?platform=8&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/" target="_blank" class="social-icon-btn h-11 flex items-center justify-center">
+                    <img src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s96-fcrop64=1,00000000ffffffff-rw" class="w-5 h-5 object-contain">
+                </a>
+                <a href="https://auth.garena.com/universal/oauth?platform=3&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/" target="_blank" class="social-icon-btn h-11 flex items-center justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Facebook_Logo_2023.png/120px-Facebook_Logo_2023.png?20231011121526" class="w-5 h-5 object-contain">
+                </a>
+                <a href="https://auth.garena.com/universal/oauth?platform=10&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/" target="_blank" class="social-icon-btn h-11 flex items-center justify-center">
+                    <i class="fab fa-apple text-xl text-white"></i>
+                </a>
+                <a href="https://auth.garena.com/universal/oauth?platform=11&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/" target="_blank" class="social-icon-btn h-11 flex items-center justify-center">
+                    <img src="https://abs.twimg.com/responsive-web/client-web/icon-default.522d363a.png" class="w-5 h-5 object-contain rounded-full bg-black">
+                </a>
+                <a href="https://auth.garena.com/universal/oauth?platform=5&response_type=code&locale=en-SG&client_id=100067&redirect_uri=https://api.ff.garena.co.id/auth/auth/callback_n?site=https://api-discountstore.kiosgamer.gameid.garena.co.id/oauth/callback_redirect/" target="_blank" class="social-icon-btn h-11 flex items-center justify-center">
+                    <img src="https://vk.com/images/icons/favicons/fav_logo.ico?8" class="w-5 h-5 object-contain">
+                </a>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="mb-5">
+            <div class="relative group">
+                <input type="text" id="tokenInp" class="cyber-input w-full rounded-xl py-3.5 pl-4 pr-10 text-sm placeholder-gray-600" placeholder="Paste Full URL or Token h..." autocomplete="off">
+                <button onclick="clearInput()" id="clearBtn" class="absolute right-3 top-3.5 text-gray-500 hover:text-red-500 transition hidden">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="flex justify-between mt-2">
+                <span class="text-[10px] text-gray-500">Both URL & Token Accepted</span>
+                <button onclick="pasteToken()" class="text-[10px] text-fuchsia-400 hover:text-white transition flex items-center gap-1">
+                    <i class="far fa-clipboard"></i> Paste
+                </button>
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button onclick="processToken()" id="btn" class="btn-grad w-full rounded-xl py-4 font-bold title-font text-white text-base tracking-widest flex items-center justify-center gap-2 mb-6">
+            GENERATE ACCESS <i class="fas fa-arrow-right text-xs"></i>
+        </button>
+
+        <!-- Output Section -->
+        <div id="output" class="hidden animate-in mb-6">
+            <div class="bg-black/40 border border-fuchsia-500/30 rounded-xl p-4 relative overflow-hidden">
+                <div class="mb-4 pb-4 border-b border-white/10">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-bold text-fuchsia-400 uppercase tracking-wider">Generated Access Token</span>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <div class="token-box rounded-lg p-2.5 text-[11px] h-auto w-full" id="accessTokenDisplay">Loading...</div>
+                        <button onclick="copyAccessToken()" class="w-full bg-fuchsia-600 hover:bg-fuchsia-500 text-white text-xs font-bold py-2 rounded-lg transition shadow-lg shadow-fuchsia-500/20">
+                            COPY TO CLIPBOARD
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 mb-3">
+                    <div>
+                        <div class="text-[10px] text-gray-500 uppercase">Nickname</div>
+                        <div class="text-white font-bold text-sm" id="nick">--</div>
+                    </div>
+                    <div class="ml-auto text-right">
+                        <div class="text-[10px] text-gray-500 uppercase">Region</div>
+                        <div class="text-white font-bold text-sm" id="reg">--</div>
+                    </div>
+                </div>
+                <div class="bg-white/5 rounded px-3 py-2 border border-white/5 flex justify-between items-center">
+                    <span class="text-[10px] text-gray-500 uppercase">Account UID</span>
+                    <span class="font-mono text-fuchsia-300 text-sm font-bold" id="aid">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Box -->
+        <div id="error-box" class="hidden animate-in mb-6">
+            <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-center">
+                <i class="fas fa-exclamation-triangle text-red-500 text-2xl mb-2"></i>
+                <h3 class="text-red-400 font-bold text-sm uppercase tracking-wider">Unknown Error</h3>
+                <p class="text-[10px] text-gray-500 mt-1">Please try again later.</p>
+            </div>
+        </div>
+
+        <!-- Footer Socials -->
+        <div class="border-t border-white/5 pt-5">
+            <p class="text-[10px] text-gray-500 text-center uppercase tracking-widest mb-3">CONNECT WITH LIMON</p>
+            <div class="grid grid-cols-2 gap-2">
+                <a href="https://t.me/NLXD_2" target="_blank" class="flex items-center gap-2 p-2.5 rounded-xl bg-[#1a1a1a] hover:bg-[#29b6f6]/10 border border-white/5 hover:border-[#29b6f6]/30 transition group">
+                    <img src="https://web.telegram.org/a/icon-192x192.png" class="w-6 h-6 rounded-full">
+                    <span class="text-xs font-medium text-gray-400 group-hover:text-white">Telegram</span>
+                </a>
+                <a href="https://www.tiktok.com/@limonff72x?_r=1&_t=ZS-99ktxa8kbqO" target="_blank" class="flex items-center gap-2 p-2.5 rounded-xl bg-[#1a1a1a] hover:bg-red-500/10 border border-white/5 hover:border-red-500/30 transition group">
+                    <img src="https://i.ibb.co.com/RkzM0Pxz/images.png" class="w-6 h-6 rounded-full">
+                    <span class="text-xs font-medium text-gray-400 group-hover:text-white">TikTok</span>
+                </a>
+            </div>
+            <div class="text-center mt-4">
+                <button onclick="openModal('termsModal')" class="text-[10px] text-gray-600 hover:text-gray-400 underline transition">
+                    Terms & Conditions
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div id="termsModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-[#0f0f13] border border-white/10 w-full max-w-sm rounded-2xl p-6 relative shadow-2xl">
+            <button onclick="closeModal('termsModal')" class="absolute top-4 right-4 text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
+            <h3 class="text-lg font-bold text-white mb-4 title-font uppercase tracking-widest text-center">Terms & Conditions</h3>
+            <div class="text-xs text-gray-400 space-y-3 leading-relaxed font-light text-justify">
+                <p>This website does not store any sensitive details. We only store basic data to provide quality & fast service.</p>
+                <p class="text-fuchsia-400"><strong>Disclaimer:</strong> Use this tool at your own risk. The developer is not responsible for any misuse.</p>
+                <p style="color: red;">Do not use these tokens to <strong>Violate Garena Terms & Conditions</strong> and do not try any kind of automations</p>
+                <p>The Owner Of This Web Made This tool For Educational purpose for Devlopers</p>
+                <p>By using this website, you explicitly agree to our terms and conditions.</p>
+            </div>
+            <button onclick="closeModal('termsModal')" class="w-full mt-6 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition">I AGREE</button>
+        </div>
+    </div>
+
+    <script>
+        const tokenInp = document.getElementById('tokenInp');
+        const clearBtn = document.getElementById('clearBtn');
+
+        tokenInp.addEventListener('input', () => {
+            clearBtn.classList.toggle('hidden', tokenInp.value.length === 0);
+        });
+
+        function clearInput() {
+            tokenInp.value = '';
+            clearBtn.classList.add('hidden');
+            tokenInp.focus();
+        }
+
+        async function pasteToken() {
+            try {
+                const text = await navigator.clipboard.readText();
+                tokenInp.value = text;
+                clearBtn.classList.remove('hidden');
+            } catch (err) { alert('Use Ctrl+V'); }
+        }
+
+        tokenInp.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") { event.preventDefault(); processToken(); }
+        });
+
+        async function processToken() {
+            let token = tokenInp.value.trim();
+            const btn = document.getElementById('btn');
+            const out = document.getElementById('output');
+            const errBox = document.getElementById('error-box');
+
+            out.classList.add('hidden');
+            errBox.classList.add('hidden');
+
+            if (!token) { tokenInp.focus(); return; }
+
+            if (token.includes("eat=")) {
+                try {
+                    const match = token.match(/eat=([^&]+)/);
+                    if (match && match[1]) {
+                        token = match[1];
+                    }
+                } catch (e) { console.log("Filtering error, using raw input"); }
+            }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> GENERATING...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token })
+                });
+
+                const result = await res.json();
+
+                if (result.success) {
+                    document.getElementById('nick').innerText = result.data.nickname;
+                    document.getElementById('reg').innerText = result.data.region;
+                    document.getElementById('aid').innerText = result.data.account_id;
+                    document.getElementById('accessTokenDisplay').innerText = result.data.access_token || "Hidden";
+                    out.classList.remove('hidden');
+                } else {
+                    errBox.classList.remove('hidden');
+                }
+            } catch (e) {
+                errBox.classList.remove('hidden');
+            } finally {
+                btn.innerHTML = 'GENERATE ACCESS <i class="fas fa-arrow-right text-xs"></i>';
+                btn.disabled = false;
+            }
+        }
+
+        function copyAccessToken() {
+            const text = document.getElementById('accessTokenDisplay').innerText;
+            if (text && text !== "Loading..." && text !== "Hidden") {
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = document.querySelector('button[onclick="copyAccessToken()"]');
+                    btn.innerText = "COPIED!";
+                    btn.classList.add("bg-green-600");
+                    setTimeout(() => {
+                        btn.innerText = "COPY TO CLIPBOARD";
+                        btn.classList.remove("bg-green-600");
+                    }, 2000);
+                });
+            }
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+        });
+
+        // পেজ লোড হওয়ার সাথে সাথেই Welcome Message দেখানোর জন্য
+        setTimeout(() => {
+            openModal('welcomeModal');
+        }, 100);
+    </script>
+</body>
+
+</html>
